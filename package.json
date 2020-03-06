@@ -1,0 +1,17 @@
+{
+  "name": "tailwindcss-theme-swapper",
+  "version": "0.0.1",
+  "main": "src/index.js",
+  "devDependencies": {
+    "jest": "^25.1.0",
+    "jest-matcher-css": "^1.1.0"
+  },
+  "scripts": {
+    "test": "jest --coverage",
+    "test:watch": "jest --watch"
+  },
+  "dependencies": {
+    "postcss": "^7.0.26",
+    "tailwindcss": "^1.2.0"
+  }
+}
