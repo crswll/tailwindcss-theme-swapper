@@ -1,3 +1,5 @@
+const kebabCase = string => string.replace(/([a-z])([A-Z])/g, '$1-$2').replace(/\s+/g, '-').toLowerCase()
+
 const flatten = (
   obj,
   transformKeyCallback = key => key.join('.'),
@@ -16,7 +18,7 @@ const flatten = (
 
 
 const getTailwindKeyName = keys =>
-  keys.filter(key => key !== 'default').join('-')
+  keys.filter(key => key !== 'default').map(kebabCase).join('-')
 
 const getThemeAsCustomVars = (tokenValues) =>
   flatten(tokenValues, keys => `--${getTailwindKeyName(keys)}`)

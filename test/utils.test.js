@@ -35,7 +35,7 @@ describe('flatten', () => {
     })
   })
 
-  test('should glatten with callback', () => {
+  test('should flatten with callback', () => {
     const result = flatten({
       foo: {
         bar: {
@@ -46,6 +46,18 @@ describe('flatten', () => {
 
     expect(result).toEqual({
       'foo---bar---baz': 1,
+    })
+  })
+
+  test('should flatten with callback', () => {
+    const result = flatten({
+      borderRadius: {
+        default: 1,
+      },
+    }, keys => `--${getTailwindKeyName(keys)}`)
+
+    expect(result).toEqual({
+      '--border-radius': 1,
     })
   })
 })
@@ -63,13 +75,17 @@ describe('getThemeAsCustomVars', () => {
       fontSize: {
         base: '16px',
       },
+      borderRadius: {
+        default: '5px',
+      },
     })
 
     expect(result).toEqual({
       '--colors-red': '#f00',
       '--colors-primary': '#444',
       '--colors-primary-darker': '#000',
-      '--fontSize-base': '16px',
+      '--font-size-base': '16px',
+      '--border-radius': '5px',
     })
   })
 
@@ -97,7 +113,7 @@ describe('getThemeAsCustomVars', () => {
           },
         },
         fontSize: {
-          base: 'var(--fontSize-base, 1rem)',
+          base: 'var(--font-size-base, 1rem)',
         },
       })
     })

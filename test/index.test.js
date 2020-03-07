@@ -19,6 +19,9 @@ const defaultTheme = {
   spacing: {
     'fart': '69px',
   },
+  borderRadius: {
+    default: '5px',
+  },
 }
 
 const darkTheme = {
@@ -85,7 +88,8 @@ describe('custom css', () => {
         --colors-hotpink: hotpink;
         --colors-primary: #f00;
         --colors-primary-darker: #400;
-        --spacing-fart: 69px
+        --spacing-fart: 69px;
+        --border-radius: 5px
       }
 
       @media (prefers-color-scheme: dark) {
