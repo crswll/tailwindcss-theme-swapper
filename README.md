@@ -1,6 +1,6 @@
 # tailwindcss-theme-swapper
 
-Turn parts of your tailwind config into CSS properties to allow for easy theming.
+**Extend** your tailwind config with CSS Custom Properties and trigger the updating of then with any type of selector or media query.
 
 ## Requirements
 
@@ -13,9 +13,9 @@ Just needs to support CSS Custom Properties. IE11 can kind of work but only the 
 ## Installation
 
 ```bash
-yarn add tailwindcss-theme-swapper
+yarn add crswll/tailwindcss-theme-swapper
 # or
-npm install tailwindcss-theme-swapper --save-dev
+npm install crswll/tailwindcss-theme-swapper --save-dev
 ```
 
 ## Usage Example
@@ -29,6 +29,8 @@ module.exports = {
   plugins: [
     themeSwapper({
       themes: [
+        // The only required theme is `base`. Every property used in
+        // other themes must exist in here.
         {
           name: 'base',
           selectors: [':root'],
@@ -70,13 +72,14 @@ module.exports = {
   // The name of the theme. You only have to name `base`.
   name: 'dark',
 
-  // Apply one of these selectors(?) for an element and all of its children to use that theme.
+  // Apply one of these selectors(?) to an element and all of its children to use that theme.
   selectors: ['.dark', '[dark]'],
 
   // If this media query matches the theme will apply to the entire page.
   mediaQuery: '@media (prefers-color-scheme: dark)',
 
-  // This extends the tailwind theme. Only keys/values defined here will be made into custom properties.
+  // This extends your tailwind theme.
+  // Only keys/values defined here will be made into custom properties.
   theme: {
     colors: {
       // ...
