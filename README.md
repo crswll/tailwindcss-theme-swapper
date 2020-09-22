@@ -73,7 +73,7 @@ module.exports = {
   name: 'dark',
 
   // Apply one of these selectors(?) to an element and all of its children to use that theme.
-  // `<div class="dark">`, `<div dat-theme="dark">`, `<div dark>`
+  // `<div class="dark">`, `<div data-theme="dark">`, `<div dark>`
   selectors: ['.dark', '[data-theme="dark"]', '[dark]', ],
 
   // If this media query matches the theme will apply to the entire page.
