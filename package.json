@@ -11,7 +11,7 @@
     "test:watch": "jest --watch"
   },
   "dependencies": {
-    "postcss": "^7.0.26",
-    "tailwindcss": "^1.2.0"
+    "postcss": "^8.0.0",
+    "tailwindcss": "^2.0.1"
   }
 }
