@@ -1,6 +1,6 @@
 {
   "name": "tailwindcss-theme-swapper",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "main": "src/index.js",
   "devDependencies": {
     "jest": "^25.1.0",
