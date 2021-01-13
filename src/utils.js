@@ -18,7 +18,7 @@ const flatten = (
 
 
 const getTailwindKeyName = keys =>
-  keys.filter(key => key !== 'default').map(kebabCase).join('-')
+  keys.filter(key => key.toLowerCase() !== 'default').map(kebabCase).join('-')
 
 const getThemeAsCustomVars = (tokenValues) =>
   flatten(tokenValues, keys => `--${getTailwindKeyName(keys)}`)
