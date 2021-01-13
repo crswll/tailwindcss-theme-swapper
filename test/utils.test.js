@@ -9,8 +9,13 @@ describe('getTailwindKeyName', () => {
   test('should return array joined', () => {
     expect(getTailwindKeyName(['foo', 'bar'])).toBe('foo-bar')
   })
+
   test('default should be removed from the path', () => {
     expect(getTailwindKeyName(['foo', 'default', 'bar'])).toBe('foo-bar')
+  })
+
+  test('DEFAULT should be removed from the path', () => {
+    expect(getTailwindKeyName(['foo', 'DEFAULT', 'bar'])).toBe('foo-bar')
   })
 })
 
