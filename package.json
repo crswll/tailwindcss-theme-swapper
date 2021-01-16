@@ -3,6 +3,7 @@
   "version": "0.2.0",
   "main": "src/index.js",
   "devDependencies": {
+    "color": "^3.1.3",
     "jest": "^25.1.0",
     "jest-matcher-css": "^1.1.0"
   },
@@ -11,6 +12,7 @@
     "test:watch": "jest --watch"
   },
   "dependencies": {
+    "chroma-js": "^2.1.0",
     "postcss": "^8.0.0",
     "tailwindcss": "^2.0.1"
   }

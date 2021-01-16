@@ -3,6 +3,7 @@ const {
   getTailwindKeyName,
   getThemeAsCustomVars,
   resolveThemeConfig,
+  tailwindVariableHelper,
 } = require('../src/utils')
 
 describe('getTailwindKeyName', () => {
@@ -67,6 +68,7 @@ describe('getThemeAsCustomVars', () => {
     const result = getThemeAsCustomVars({
       colors: {
         red: '#f00',
+        hot: 'hotpink',
         primary: {
           default: '#444',
           darker: '#000',
@@ -81,9 +83,10 @@ describe('getThemeAsCustomVars', () => {
     })
 
     expect(result).toEqual({
-      '--colors-red': '#f00',
-      '--colors-primary': '#444',
-      '--colors-primary-darker': '#000',
+      '--colors-red': '255 0 0',
+      '--colors-hot': '255 105 180',
+      '--colors-primary': '68 68 68',
+      '--colors-primary-darker': '0 0 0',
       '--font-size-base': '16px',
       '--border-radius': '5px',
     })
@@ -106,16 +109,26 @@ describe('getThemeAsCustomVars', () => {
 
       expect(result).toEqual({
         colors: {
-          red: 'var(--colors-red, #f00)',
+          red: expect.any(Function),
           primary: {
-            default: 'var(--colors-primary, #f00)',
-            darker: 'var(--colors-primary-darker, #400)',
+            default: expect.any(Function),
+            darker: expect.any(Function),
           },
         },
         fontSize: {
           base: 'var(--font-size-base, 1rem)',
         },
       })
+    })
+  })
+
+  describe('tailwindVariableHelper', () => {
+    test('should return', () => {
+      const result = tailwindVariableHelper('foo')
+
+      expect(result({ opacityValue: '0.3' })).toEqual(`rgb(var(--foo) / 0.3)`)
+      expect(result({ opacityVariable: '--tw-foo-bar' })).toEqual(`rgb(var(--foo) / var(--tw-foo-bar, 1))`)
+      expect(result()).toEqual(`rgb(var(--foo))`)
     })
   })
 })
