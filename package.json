@@ -12,7 +12,6 @@
     "test:watch": "jest --watch"
   },
   "dependencies": {
-    "chroma-js": "^2.1.0",
     "postcss": "^8.0.0",
     "tailwindcss": "^2.0.1"
   }
