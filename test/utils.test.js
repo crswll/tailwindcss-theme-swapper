@@ -1,4 +1,5 @@
 const {
+  defaultConfigValueTransformer,
   defaultCustomPropValueTransformer,
   flatten,
   getTailwindKeyName,
@@ -148,6 +149,18 @@ describe('getThemeAsCustomVars', () => {
 
     test('should just return the value when it is not a color', () => {
       expect(defaultCustomPropValueTransformer(['fontSize'], '16px')).toEqual('16px')
+    })
+  })
+
+  describe('defaultConfigValueTransformer', () => {
+    test('should return a string in rgb for color type configs', () => {
+      expect(defaultConfigValueTransformer(['colors', 'primary'], 'rgb(255, 0, 0)')({ opacityVariable: '--bg-opacity' })).toEqual('rgb(var(--colors-primary) / var(--bg-opacity, 1))')
+      expect(defaultConfigValueTransformer(['colors', 'primary'], 'rgb(255, 0, 0)')({ opacityValue: '0.2' })).toEqual('rgb(var(--colors-primary) / 0.2)')
+      expect(defaultConfigValueTransformer(['colors', 'primary'], 'rgb(255, 0, 0)')()).toEqual('rgb(var(--colors-primary))')
+    })
+
+    test('should just return the value when it is not a color', () => {
+      expect(defaultConfigValueTransformer(['fontSize'], '16px')).toEqual('var(--font-size, 16px)')
     })
   })
 

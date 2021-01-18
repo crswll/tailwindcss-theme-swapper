@@ -6,15 +6,15 @@ const colorConfigKeys = [
   'borderColor',
 ]
 
-function kebabCase(string) {
+function kebabCase (string) {
   return string
   .replace(/([a-z])([A-Z])/g, '$1-$2')
   .replace(/\s+/g, '-')
   .toLowerCase()
 }
 
-function tailwindVariableHelper(name) {
-  return function({ opacityVariable, opacityValue } = {}) {
+function tailwindVariableHelper (name) {
+  return function ({ opacityVariable, opacityValue } = {}) {
     if (opacityValue !== undefined) {
       return `rgb(var(--${name}) / ${opacityValue})`
     }
@@ -49,7 +49,7 @@ function flatten (
 const getTailwindKeyName = keys =>
   keys.filter(key => key !== 'default').map(kebabCase).join('-')
 
-function hasAlpha(color) {
+function hasAlpha (color) {
   return (
     color.startsWith('rgba(') ||
     color.startsWith('hsla(') ||
@@ -58,7 +58,7 @@ function hasAlpha(color) {
   )
 }
 
-function toRgba(color) {
+function toRgba (color) {
   try {
     const [ r, g, b, a ] = Color(color).rgb().array()
     return [ r, g, b, a === undefined && hasAlpha(color) ? 1 : a ]
@@ -67,7 +67,7 @@ function toRgba(color) {
   }
 }
 
-function defaultCustomPropValueTransformer(keys, value) {
+function defaultCustomPropValueTransformer (keys, value) {
   if (colorConfigKeys.includes(keys[0])) {
     const color = toRgba(value)
     if (!hasAlpha(value) && color) {
@@ -90,7 +90,7 @@ function defaultConfigValueTransformer (keys, value) {
 }
 
 
-function getThemeAsCustomVars(
+function getThemeAsCustomVars (
   tokenValues,
   transformer = defaultCustomPropValueTransformer
 ) {
@@ -102,7 +102,7 @@ function getThemeAsCustomVars(
 }
 
 
-function resolveThemeConfig(
+function resolveThemeConfig (
   tokenValue,
   previousKeys = [],
   valueTransformer = defaultConfigValueTransformer
@@ -120,6 +120,7 @@ function resolveThemeConfig(
     }, {})
 }
 
+module.exports.defaultConfigValueTransformer = defaultConfigValueTransformer
 module.exports.defaultCustomPropValueTransformer = defaultCustomPropValueTransformer
 module.exports.flatten = flatten
 module.exports.getTailwindKeyName = getTailwindKeyName
