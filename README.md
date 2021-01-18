@@ -13,9 +13,9 @@ Just needs to support CSS Custom Properties. IE11 can kind of work but only the 
 ## Installation
 
 ```bash
-yarn add crswll/tailwindcss-theme-swapper
+yarn add tailwindcss-theme-swapper
 # or
-npm install crswll/tailwindcss-theme-swapper --save-dev
+npm install tailwindcss-theme-swapper --save-dev
 ```
 
 ## Usage Example

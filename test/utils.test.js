@@ -1,8 +1,12 @@
 const {
+  defaultConfigValueTransformer,
+  defaultCustomPropValueTransformer,
   flatten,
   getTailwindKeyName,
   getThemeAsCustomVars,
   resolveThemeConfig,
+  tailwindVariableHelper,
+  toRgba,
 } = require('../src/utils')
 
 describe('getTailwindKeyName', () => {
@@ -72,6 +76,7 @@ describe('getThemeAsCustomVars', () => {
     const result = getThemeAsCustomVars({
       colors: {
         red: '#f00',
+        hot: 'hotpink',
         primary: {
           default: '#444',
           darker: '#000',
@@ -86,9 +91,10 @@ describe('getThemeAsCustomVars', () => {
     })
 
     expect(result).toEqual({
-      '--colors-red': '#f00',
-      '--colors-primary': '#444',
-      '--colors-primary-darker': '#000',
+      '--colors-red': '255 0 0',
+      '--colors-hot': '255 105 180',
+      '--colors-primary': '68 68 68',
+      '--colors-primary-darker': '0 0 0',
       '--font-size-base': '16px',
       '--border-radius': '5px',
     })
@@ -111,16 +117,65 @@ describe('getThemeAsCustomVars', () => {
 
       expect(result).toEqual({
         colors: {
-          red: 'var(--colors-red, #f00)',
+          red: expect.any(Function),
           primary: {
-            default: 'var(--colors-primary, #f00)',
-            darker: 'var(--colors-primary-darker, #400)',
+            default: expect.any(Function),
+            darker: expect.any(Function),
           },
         },
         fontSize: {
           base: 'var(--font-size-base, 1rem)',
         },
       })
+    })
+  })
+
+  describe('toRgba', () => {
+    test('should return an array of rgba', () => {
+      expect(toRgba('#fff')).toEqual([255, 255, 255, undefined])
+      expect(toRgba('#ffff')).toEqual([255, 255, 255, 1])
+      expect(toRgba('#fff0')).toEqual([255, 255, 255, 0])
+      expect(toRgba('hotpink')).toEqual([255, 105, 180, undefined])
+      expect(toRgba('rgb(255, 0, 0)')).toEqual([255, 0, 0, undefined])
+      expect(toRgba('rgba(255, 0, 0, 0.5)')).toEqual([255, 0, 0, 0.5])
+      expect(toRgba('hsl(0, 100%, 50%)')).toEqual([255, 0, 0, undefined])
+      expect(toRgba('hsl(0, 100%, 50%, 0.5)')).toEqual([255, 0, 0, 0.5])
+      expect(toRgba('__DEFINITELY_NOT_A_COLOR_NO_WAY_NO_HOW__')).toEqual(null)
+    })
+  })
+
+  describe('defaultCustomVarTransformer', () => {
+    test('should return a string in rgb for colors', () => {
+      expect(defaultCustomPropValueTransformer(['colors'], 'rgb(255, 0, 0)')).toEqual('255 0 0')
+      expect(defaultCustomPropValueTransformer(['backgroundColor'], 'rgb(255, 0, 0)')).toEqual('255 0 0')
+      expect(defaultCustomPropValueTransformer(['borderColor'], 'rgb(255, 0, 0)')).toEqual('255 0 0')
+      expect(defaultCustomPropValueTransformer(['textColor'], 'rgb(255, 0, 0)')).toEqual('255 0 0')
+    })
+
+    test('should just return the value when it is not a color', () => {
+      expect(defaultCustomPropValueTransformer(['fontSize'], '16px')).toEqual('16px')
+    })
+  })
+
+  describe('defaultConfigValueTransformer', () => {
+    test('should return a string in rgb for color type configs', () => {
+      expect(defaultConfigValueTransformer(['colors', 'primary'], 'rgb(255, 0, 0)')({ opacityVariable: '--bg-opacity' })).toEqual('rgb(var(--colors-primary) / var(--bg-opacity, 1))')
+      expect(defaultConfigValueTransformer(['colors', 'primary'], 'rgb(255, 0, 0)')({ opacityValue: '0.2' })).toEqual('rgb(var(--colors-primary) / 0.2)')
+      expect(defaultConfigValueTransformer(['colors', 'primary'], 'rgb(255, 0, 0)')()).toEqual('rgb(var(--colors-primary))')
+    })
+
+    test('should just return the value when it is not a color', () => {
+      expect(defaultConfigValueTransformer(['fontSize'], '16px')).toEqual('var(--font-size, 16px)')
+    })
+  })
+
+  describe('tailwindVariableHelper', () => {
+    test('should return', () => {
+      const result = tailwindVariableHelper('foo')
+
+      expect(result({ opacityValue: '0.3' })).toEqual(`rgb(var(--foo) / 0.3)`)
+      expect(result({ opacityVariable: '--tw-foo-bar' })).toEqual(`rgb(var(--foo) / var(--tw-foo-bar, 1))`)
+      expect(result()).toEqual(`rgb(var(--foo))`)
     })
   })
 })
