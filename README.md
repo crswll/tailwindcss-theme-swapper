@@ -18,6 +18,10 @@ yarn add tailwindcss-theme-swapper
 npm install tailwindcss-theme-swapper --save-dev
 ```
 
+## Try It Out
+
+https://play.tailwindcss.com/HNxtESwcIP
+
 ## Usage Example
 
 In your tailwind.config.js:
@@ -106,7 +110,7 @@ const themes = [
     selectors: [':root'],
     theme: {
       colors: {
-        text: '#222',
+        primary: '#222',
       },
     },
   },
@@ -120,7 +124,7 @@ const themes = [
     mediaQuery: '@media (prefers-color-scheme: dark)',
     theme: {
       colors: {
-        base: '#ddd',
+        primary: '#ddd',
       },
     },
   },
@@ -129,7 +133,7 @@ const themes = [
     mediaQuery: '@media (prefers-contrast: high)',
     theme: {
       colors: {
-        base: '#ddd',
+        primary: '#ddd',
       },
     },
   },
@@ -140,30 +144,41 @@ const themes = [
 
 ```css
 :root {
-  --base: #222
+  --colors-primary: 34 34 34
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --base: #ddd
+    --colors-primary: 221 221 221
   }
 }
 
 .dark, [dark], [data-theme="dark"] {
   :root {
-    --base: #ddd
+    --colors-primary: 221 221 221
   }
 }
 
 @media (prefers-contrast: high) {
   :root {
-    --base: #fff
+    --colors-primary: 255 255 255
   }
 }
 
-...
+/* ... */
 
-.text-base { color: var(--base, #222) }
-.bg-base { background-color: var(--base, #222) }
-.border-base { border-color: var(--base, #222)}
+.text-primary {
+  --tw-text-opacity: 1;
+  color: rgb(var(--colors-primary) / var(--tw-text-opacity));
+}
+
+.bg-primary {
+  --tw-bg-opacity: 1;
+  background-color: rgb(var(--colors-primary) / var(--tw-bg-opacity));
+}
+
+.border-primary {
+  --tw-border-opacity: 1;
+  border-color: rgb(var(--colors-primary) / var(--tw-border-opacity));
+}
 ```
