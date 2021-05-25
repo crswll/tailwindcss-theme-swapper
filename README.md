@@ -154,9 +154,7 @@ const themes = [
 }
 
 .dark, [dark], [data-theme="dark"] {
-  :root {
-    --colors-primary: 221 221 221
-  }
+  --colors-primary: 221 221 221
 }
 
 @media (prefers-contrast: high) {
