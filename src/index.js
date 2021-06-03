@@ -3,7 +3,6 @@ const { getThemeAsCustomProps, resolveThemeConfig } = require('./utils')
 
 const defaultOptions = {
   themes: [],
-  hashed: false,
 }
 
 const themeSwap = (options = defaultOptions) => ({ addBase }) => {
