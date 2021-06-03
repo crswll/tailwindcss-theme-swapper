@@ -1,5 +1,5 @@
 const plugin = require('tailwindcss/plugin')
-const { getThemeAsCustomVars, resolveThemeConfig } = require('./utils')
+const { getThemeAsCustomProps, resolveThemeConfig } = require('./utils')
 
 const defaultOptions = {
   themes: [],
@@ -13,14 +13,14 @@ const themeSwap = (options = defaultOptions) => ({ addBase }) => {
 
     if (selectors.length > 0) {
       addBase({
-        [selectors.join(', ')]: getThemeAsCustomVars(theme)
+        [selectors.join(', ')]: getThemeAsCustomProps(theme)
       })
     }
 
     if (mediaQuery) {
       addBase({
         [mediaQuery]: {
-          ':root': getThemeAsCustomVars(theme),
+          ':root': getThemeAsCustomProps(theme),
         }
       })
     }
