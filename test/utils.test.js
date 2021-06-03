@@ -79,22 +79,24 @@ describe('getThemeAsCustomProps', () => {
         hot: 'hotpink',
         primary: {
           default: '#444',
-          darker: '#000',
         },
       },
-      fontSize: {
-        base: '16px',
-      },
-      borderRadius: {
-        default: '5px',
-      },
+      textColor: { test: '#444' },
+      backgroundColor: { test: '#444' },
+      borderColor: { test: '#444' },
+      ringColor: { test: '#444' },
+      fontSize: { base: '16px' },
+      borderRadius: { default: '5px' },
     })
 
     expect(result).toEqual({
       '--colors-red': '255 0 0',
       '--colors-hot': '255 105 180',
       '--colors-primary': '68 68 68',
-      '--colors-primary-darker': '0 0 0',
+      '--background-color-test': '68 68 68',
+      '--text-color-test': '68 68 68',
+      '--border-color-test': '68 68 68',
+      '--ring-color-test': '68 68 68',
       '--font-size-base': '16px',
       '--border-radius': '5px',
     })

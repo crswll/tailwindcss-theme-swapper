@@ -4,6 +4,7 @@ const colorConfigKeys = [
   'backgroundColor',
   'textColor',
   'borderColor',
+  'ringColor',
 ]
 
 function kebabCase (string) {
