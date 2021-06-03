@@ -3,7 +3,7 @@ const {
   defaultCustomPropValueTransformer,
   flatten,
   getTailwindKeyName,
-  getThemeAsCustomVars,
+  getThemeAsCustomProps,
   resolveThemeConfig,
   tailwindVariableHelper,
   toRgba,
@@ -71,9 +71,9 @@ describe('flatten', () => {
   })
 })
 
-describe('getThemeAsCustomVars', () => {
-  test('should flatten to a simple object with custom vars as the keys', () => {
-    const result = getThemeAsCustomVars({
+describe('getThemeAsCustomProps', () => {
+  test('should flatten to a simple object with custom props as the keys', () => {
+    const result = getThemeAsCustomProps({
       colors: {
         red: '#f00',
         hot: 'hotpink',

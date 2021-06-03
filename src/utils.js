@@ -90,7 +90,7 @@ function defaultConfigValueTransformer (keys, value) {
 }
 
 
-function getThemeAsCustomVars (
+function getThemeAsCustomProps (
   tokenValues,
   transformer = defaultCustomPropValueTransformer
 ) {
@@ -124,7 +124,7 @@ module.exports.defaultConfigValueTransformer = defaultConfigValueTransformer
 module.exports.defaultCustomPropValueTransformer = defaultCustomPropValueTransformer
 module.exports.flatten = flatten
 module.exports.getTailwindKeyName = getTailwindKeyName
-module.exports.getThemeAsCustomVars = getThemeAsCustomVars
+module.exports.getThemeAsCustomProps = getThemeAsCustomProps
 module.exports.resolveThemeConfig = resolveThemeConfig
 module.exports.tailwindVariableHelper = tailwindVariableHelper
 module.exports.toRgba = toRgba
