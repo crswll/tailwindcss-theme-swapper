@@ -1,10 +1,17 @@
 const Color = require('color')
 const colorConfigKeys = [
-  'colors',
   'backgroundColor',
-  'textColor',
   'borderColor',
+  'caretColor',
+  'colors',
+  'divideColor',
+  'fill',
+  'gradientColorStops',
+  'placeholderColor',
   'ringColor',
+  'ringOffsetColor',
+  'stroke',
+  'textColor',
 ]
 
 function kebabCase (string) {
