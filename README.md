@@ -20,7 +20,7 @@ npm install tailwindcss-theme-swapper --save-dev
 
 ## Try It Out
 
-https://play.tailwindcss.com/HNxtESwcIP
+https://play.tailwindcss.com/Hg9AO7mqWa
 
 ## Usage Example
 
