@@ -24,10 +24,10 @@ function kebabCase (string) {
 function tailwindVariableHelper (name) {
   return function ({ opacityVariable, opacityValue } = {}) {
     if (opacityValue !== undefined) {
-      return `rgb(var(--${name}) / ${opacityValue})`
+      return `rgba(var(--${name}), ${opacityValue})`
     }
     if (opacityVariable !== undefined) {
-      return `rgb(var(--${name}) / var(${opacityVariable}, 1))`
+      return `rgba(var(--${name}), var(${opacityVariable}, 1))`
     }
     return `rgb(var(--${name}))`
   }
@@ -80,7 +80,7 @@ function defaultCustomPropValueTransformer (keys, value) {
     const color = toRgba(value)
     if (!hasAlpha(value) && color) {
       const [ r, g, b ] = color
-      return `${r} ${g} ${b}`
+      return `${r}, ${g}, ${b}`
     }
   }
 
