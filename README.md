@@ -20,7 +20,11 @@ npm install tailwindcss-theme-swapper --save-dev
 
 ## Try It Out
 
+### Minimal
 https://play.tailwindcss.com/Hg9AO7mqWa
+
+### Fancier (radix colors, multiple themes)
+https://play.tailwindcss.com/jskI9McL20
 
 ## Usage Example
 
