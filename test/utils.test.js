@@ -175,7 +175,7 @@ describe('getThemeAsCustomProps', () => {
       expect(defaultConfigValueTransformer(['fontFamily', 'sans'], ['font a', 'font b'])).toEqual('var(--font-family-sans, font a,font b)')
     })
 
-    test('should throw a warning when using the more complex allowed value for font size', () => {
+    test('should just use the font-size when using a more complex value for fontSize', () => {
       expect(defaultConfigValueTransformer(['fontSize', 'complex'], ['24px', { lineHeight: '1.2' }])).toEqual('var(--font-size-complex, 24px)')
       expect(defaultConfigValueTransformer(['fontSize', 'complex'], ['22px', '1.2'])).toEqual('var(--font-size-complex, 22px)')
     })
