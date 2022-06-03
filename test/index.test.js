@@ -23,6 +23,13 @@ const defaultTheme = {
   borderRadius: {
     default: '5px',
   },
+  fontFamily: {
+    sans: ['Font A', 'Font B', 'Font C']
+  },
+  fontSize: {
+    sm: '12px',
+    complex: ['22px', { lineHeight: '1.2rem' }]
+  },
 }
 
 const darkTheme = {
@@ -90,7 +97,10 @@ postcss(tailwindcss({
         --colors-primary: 255 0 0;
         --colors-primary-darker: 68 0 0;
         --spacing-fart: 69px;
-        --border-radius: 5px
+        --border-radius: 5px;
+        --font-family-sans: Font A, Font B, Font C;
+        --font-size-sm: 12px;
+        --font-size-complex: 22px;
       }
 
       @media (prefers-color-scheme: dark) {
