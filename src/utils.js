@@ -45,7 +45,7 @@ function flatten (
     .reduce((acc, [key, value]) => {
       const keyPath = [...previousKeys, key]
 
-      if (typeof value === "object" && !Array.isArray(value)) {
+      if (typeof value === 'object' && !Array.isArray(value)) {
         flatten(value, transformKeyCallback, transformValueCallback, keyPath, acc)
       } else {
         flattened[transformKeyCallback(keyPath)] = transformValueCallback(keyPath, value)
@@ -102,8 +102,8 @@ function defaultConfigValueTransformer (keys, value) {
     }
   }
 
-  if (keys[0] === 'fontSize' && typeof value === "object") {
-    if (process.env.NODE_ENV !== "test") {
+  if (keys[0] === 'fontSize' && typeof value === 'object') {
+    if (process.env.NODE_ENV !== 'test') {
       console.warn(`tailwindcss-theme-swapper: Only using the font size defined at ${keys.join('.')}. Support for this may come if enough people complain about it.`)
     }
 
@@ -137,7 +137,7 @@ function resolveThemeConfig (
       const keyPath = [ ...previousKeys, key ]
       return {
         ...acc,
-        [key]: typeof value === "object" && !Array.isArray(value)
+        [key]: typeof value === 'object' && !Array.isArray(value)
           ? resolveThemeConfig(value, keyPath)
           : valueTransformer(keyPath, value)
       }
