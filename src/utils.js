@@ -104,7 +104,7 @@ function defaultConfigValueTransformer (keys, value) {
 
   if (keys[0] === 'fontSize' && typeof value === "object") {
     if (process.env.NODE_ENV !== "test") {
-      console.warn("tailwindcss-theme-swapper: Only using font-size from", value, 'for', keys)
+      console.warn(`tailwindcss-theme-swapper: Only using the font size defined at ${keys.join('.')}. Support for this may come if enough people complain about it.`)
     }
 
     return `var(--${getTailwindKeyName(keys)}, ${value[0]})`
