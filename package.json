@@ -1,6 +1,6 @@
 {
   "name": "tailwindcss-theme-swapper",
-  "version": "0.6.3",
+  "version": "0.6.4",
   "main": "src/index.js",
   "license": "MIT",
   "devDependencies": {
