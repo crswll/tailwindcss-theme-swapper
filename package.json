@@ -8,7 +8,7 @@
     "jest-matcher-css": "^1.1.0"
   },
   "scripts": {
-    "test": "jest --coverage",
+    "test": "jest",
     "test:watch": "jest --watch"
   },
   "dependencies": {
