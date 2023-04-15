@@ -19,7 +19,7 @@ describe('getTailwindKeyName', () => {
   })
 
   test('DEFAULT should be removed from the path', () => {
-    expect(getTailwindKeyName(['foo', 'DEFAULT', 'bar'])).toBe('foo-bar')
+    expect(getTailwindKeyName(['foo', 'DEFAULT', 'bar'])).toBe('foo-ba')
   })
 })
 
