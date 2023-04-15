@@ -1,6 +1,6 @@
 {
   "name": "tailwindcss-theme-swapper",
-  "version": "0.6.4",
+  "version": "0.6.5",
   "main": "src/index.js",
   "license": "MIT",
   "devDependencies": {
@@ -8,7 +8,7 @@
     "jest-matcher-css": "^1.1.0"
   },
   "scripts": {
-    "test": "jest --coverage",
+    "test": "jest",
     "test:watch": "jest --watch"
   },
   "dependencies": {
