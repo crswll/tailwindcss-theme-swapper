@@ -23,6 +23,7 @@ const defaultTheme = {
   borderRadius: {
     default: '5px',
   },
+  fontFamily: ['a', 'b', '"C 4"']
 }
 
 const darkTheme = {
@@ -90,7 +91,8 @@ postcss(tailwindcss({
         --colors-primary: 255 0 0;
         --colors-primary-darker: 68 0 0;
         --spacing-fart: 69px;
-        --border-radius: 5px
+        --border-radius: 5px;
+        --font-family: a, b, "C 4"
       }
 
       @media (prefers-color-scheme: dark) {
