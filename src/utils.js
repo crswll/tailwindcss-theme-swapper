@@ -45,7 +45,7 @@ function flatten (
     .reduce((acc, [key, value]) => {
       const keyPath = [...previousKeys, key]
 
-      if (typeof value === 'object') {
+      if (typeof value === 'object' && !Array.isArray(value)) {
         flatten(value, transformKeyCallback, transformValueCallback, keyPath, acc)
       } else {
         flattened[transformKeyCallback(keyPath)] = transformValueCallback(keyPath, value)
@@ -82,6 +82,10 @@ function defaultCustomPropValueTransformer (keys, value) {
       const [ r, g, b ] = color
       return `${r} ${g} ${b}`
     }
+  }
+
+  if (Array.isArray(value)) {
+    return value.join(', ')
   }
 
   return value

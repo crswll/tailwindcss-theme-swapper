@@ -35,12 +35,14 @@ describe('flatten', () => {
         deep: true,
       },
       shallow: 2,
+      list: [1, 2],
     })
 
     expect(result).toEqual({
       'foo.bar.baz': 'whoa',
       'not.deep': true,
       'shallow': 2,
+      'list': [1, 2],
     })
   })
 
@@ -87,6 +89,7 @@ describe('getThemeAsCustomProps', () => {
       ringColor: { test: '#444' },
       fontSize: { base: '16px' },
       borderRadius: { default: '5px' },
+      fontFamily: { foo: ['a', 'b', '"C 4"'] },
     })
 
     expect(result).toEqual({
@@ -99,6 +102,7 @@ describe('getThemeAsCustomProps', () => {
       '--ring-color-test': '68 68 68',
       '--font-size-base': '16px',
       '--border-radius': '5px',
+      '--font-family-foo': 'a, b, "C 4"',
     })
   })
 
