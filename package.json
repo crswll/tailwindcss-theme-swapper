@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "color": "^4.2.3",
-    "postcss": "^8.4.21",
+    "postcss": "^8.4.31",
     "tailwindcss": "^3.3.1"
   }
 }
