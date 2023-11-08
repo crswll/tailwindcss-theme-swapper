@@ -78,7 +78,7 @@ function toRgba (color) {
 function defaultCustomPropValueTransformer (keys, value) {
   if (colorConfigKeys.includes(keys[0])) {
     const color = toRgba(value)
-    if (!hasAlpha(value) && color) {
+    if (color) {
       const [ r, g, b ] = color
       return `${r} ${g} ${b}`
     }
@@ -93,7 +93,7 @@ function defaultCustomPropValueTransformer (keys, value) {
 
 function defaultConfigValueTransformer (keys, value) {
   if (colorConfigKeys.includes(keys[0])) {
-    if (!hasAlpha(value) && toRgba(value)) {
+    if (toRgba(value)) {
       return tailwindVariableHelper(getTailwindKeyName(keys))
     }
   }

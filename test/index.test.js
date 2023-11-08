@@ -70,7 +70,7 @@ postcss(tailwindcss({
       expect(resolvedConfig).toMatchObject({
         "theme": {
           "colors": {
-            "opacity": "var(--colors-opacity, rgba(255, 0, 0, 0.5))",
+            "opacity": expect.any(Function),
             "hotpink": expect.any(Function),
           },
           "spacing": {
@@ -87,7 +87,7 @@ postcss(tailwindcss({
       const sampleConfigOutput = `
       :root, .light {
         --colors-hotpink: 255 105 180;
-        --colors-opacity: rgba(255, 0, 0, 0.5);
+        --colors-opacity: 255 0 0;
         --colors-primary: 255 0 0;
         --colors-primary-darker: 68 0 0;
         --spacing-fart: 69px;
