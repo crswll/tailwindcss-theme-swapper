@@ -138,14 +138,14 @@ describe('getThemeAsCustomProps', () => {
 
   describe('toRgba', () => {
     test('should return an array of rgba', () => {
-      expect(toRgba('#fff')).toEqual([255, 255, 255, undefined])
-      expect(toRgba('#ffff')).toEqual([255, 255, 255, 1])
-      expect(toRgba('#fff0')).toEqual([255, 255, 255, 0])
-      expect(toRgba('hotpink')).toEqual([255, 105, 180, undefined])
-      expect(toRgba('rgb(255, 0, 0)')).toEqual([255, 0, 0, undefined])
-      expect(toRgba('rgba(255, 0, 0, 0.5)')).toEqual([255, 0, 0, 0.5])
-      expect(toRgba('hsl(0, 100%, 50%)')).toEqual([255, 0, 0, undefined])
-      expect(toRgba('hsl(0, 100%, 50%, 0.5)')).toEqual([255, 0, 0, 0.5])
+      expect(toRgba('#fff')).toEqual([255, 255, 255])
+      expect(toRgba('#ffff')).toEqual([255, 255, 255])
+      expect(toRgba('#fff0')).toEqual([255, 255, 255])
+      expect(toRgba('hotpink')).toEqual([255, 105, 180])
+      expect(toRgba('rgb(255, 0, 0)')).toEqual([255, 0, 0])
+      expect(toRgba('rgba(255, 0, 0, 0.5)')).toEqual([255, 0, 0])
+      expect(toRgba('hsl(0, 100%, 50%)')).toEqual([255, 0, 0])
+      expect(toRgba('hsl(0, 100%, 50%, 0.5)')).toEqual([255, 0, 0])
       expect(toRgba('__DEFINITELY_NOT_A_COLOR_NO_WAY_NO_HOW__')).toEqual(null)
     })
   })

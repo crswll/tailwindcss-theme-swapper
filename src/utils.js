@@ -57,19 +57,10 @@ function flatten (
 const getTailwindKeyName = keys =>
   keys.filter(key => key.toLowerCase() !== 'default').map(kebabCase).join('-')
 
-function hasAlpha (color) {
-  return (
-    color.startsWith('rgba(') ||
-    color.startsWith('hsla(') ||
-    (color.startsWith('#') && color.length === 9) ||
-    (color.startsWith('#') && color.length === 5)
-  )
-}
-
 function toRgba (color) {
   try {
-    const [ r, g, b, a ] = Color(color).rgb().array()
-    return [ r, g, b, a === undefined && hasAlpha(color) ? 1 : a ]
+    const [ r, g, b ] = Color(color).rgb().array()
+    return [ r, g, b ]
   } catch {
     return null
   }
