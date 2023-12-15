@@ -1,4 +1,3 @@
-const Color = require('color')
 const colorConfigKeys = [
   'accentColor',
   'backgroundColor',
