@@ -1,5 +1,6 @@
 const Color = require('color')
 const colorConfigKeys = [
+  'accentColor',
   'backgroundColor',
   'borderColor',
   'caretColor',
@@ -19,18 +20,6 @@ function kebabCase (string) {
   .replace(/([a-z])([A-Z])/g, '$1-$2')
   .replace(/\s+/g, '-')
   .toLowerCase()
-}
-
-function tailwindVariableHelper (name) {
-  return function ({ opacityVariable, opacityValue } = {}) {
-    if (opacityValue !== undefined) {
-      return `rgb(var(--${name}) / ${opacityValue})`
-    }
-    if (opacityVariable !== undefined) {
-      return `rgb(var(--${name}) / var(${opacityVariable}, 1))`
-    }
-    return `rgb(var(--${name}))`
-  }
 }
 
 function flatten (
@@ -57,22 +46,9 @@ function flatten (
 const getTailwindKeyName = keys =>
   keys.filter(key => key.toLowerCase() !== 'default').map(kebabCase).join('-')
 
-function toRgba (color) {
-  try {
-    const [ r, g, b ] = Color(color).rgb().array()
-    return [ r, g, b ]
-  } catch {
-    return null
-  }
-}
-
 function defaultCustomPropValueTransformer (keys, value) {
   if (colorConfigKeys.includes(keys[0])) {
-    const color = toRgba(value)
-    if (color) {
-      const [ r, g, b ] = color
-      return `${r} ${g} ${b}`
-    }
+    return `color-mix(in srgb, ${value}, transparent calc(100% - 100% * <alpha-value>))`
   }
 
   if (Array.isArray(value)) {
@@ -83,13 +59,7 @@ function defaultCustomPropValueTransformer (keys, value) {
 }
 
 function defaultConfigValueTransformer (keys, value) {
-  if (colorConfigKeys.includes(keys[0])) {
-    if (toRgba(value)) {
-      return tailwindVariableHelper(getTailwindKeyName(keys))
-    }
-  }
-
-  return `var(--${getTailwindKeyName(keys)}, ${value})`
+  return `var(--${getTailwindKeyName(keys)})`
 }
 
 
@@ -129,5 +99,4 @@ module.exports.flatten = flatten
 module.exports.getTailwindKeyName = getTailwindKeyName
 module.exports.getThemeAsCustomProps = getThemeAsCustomProps
 module.exports.resolveThemeConfig = resolveThemeConfig
-module.exports.tailwindVariableHelper = tailwindVariableHelper
-module.exports.toRgba = toRgba
+module.exports.colorConfigKeys = colorConfigKeys

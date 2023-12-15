@@ -11,7 +11,7 @@ expect.extend({
 const defaultTheme = {
   colors: {
     hotpink: 'hotpink',
-    'with-opacity-ignored': 'rgba(255, 0, 0, 0.5)',
+    'with-opacity': 'rgba(255, 0, 0, 0.5)',
     primary: {
       default: '#f00',
       darker: '#400',
@@ -70,11 +70,11 @@ postcss(tailwindcss({
       expect(resolvedConfig).toMatchObject({
         "theme": {
           "colors": {
-            "with-opacity-ignored": expect.any(Function),
-            "hotpink": expect.any(Function),
+            "with-opacity": "var(--colors-with-opacity)",
+            "hotpink": "var(--colors-hotpink)",
           },
           "spacing": {
-            "fart": "var(--spacing-fart, 69px)",
+            "fart": "var(--spacing-fart)",
           },
         },
       })
@@ -86,10 +86,10 @@ postcss(tailwindcss({
       const sampleConfig = { plugins: [tokenPlugin(themeSwapperOptions)] }
       const sampleConfigOutput = `
       :root, .light {
-        --colors-hotpink: 255 105 180;
-        --colors-with-opacity-ignored: 255 0 0;
-        --colors-primary: 255 0 0;
-        --colors-primary-darker: 68 0 0;
+        --colors-hotpink: color-mix(in srgb, hotpink, transparent calc(100% - 100% * <alpha-value>));
+        --colors-with-opacity: color-mix(in srgb, rgba(255, 0, 0, 0.5), transparent calc(100% - 100% * <alpha-value>));
+        --colors-primary: color-mix(in srgb, #f00, transparent calc(100% - 100% * <alpha-value>));
+        --colors-primary-darker: color-mix(in srgb, #400, transparent calc(100% - 100% * <alpha-value>));
         --spacing-fart: 69px;
         --border-radius: 5px;
         --font-family: a, b, "C 4"
@@ -97,8 +97,8 @@ postcss(tailwindcss({
 
       @media (prefers-color-scheme: dark) {
         :root {
-          --colors-primary: 255 255 255;
-          --colors-primary-darker: 170 170 170
+          --colors-primary: color-mix(in srgb, #fff, transparent calc(100% - 100% * <alpha-value>));
+          --colors-primary-darker: color-mix(in srgb, #aaa, transparent calc(100% - 100% * <alpha-value>));
         }
       }
       `

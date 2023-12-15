@@ -5,9 +5,10 @@ const {
   getTailwindKeyName,
   getThemeAsCustomProps,
   resolveThemeConfig,
-  tailwindVariableHelper,
-  toRgba,
+  colorConfigKeys
 } = require('../src/utils')
+
+const getValueColorMixed = color => `color-mix(in srgb, ${color}, transparent calc(100% - 100% * <alpha-value>))`
 
 describe('getTailwindKeyName', () => {
   test('should return array joined', () => {
@@ -93,13 +94,13 @@ describe('getThemeAsCustomProps', () => {
     })
 
     expect(result).toEqual({
-      '--colors-red': '255 0 0',
-      '--colors-hot': '255 105 180',
-      '--colors-primary': '68 68 68',
-      '--background-color-test': '68 68 68',
-      '--text-color-test': '68 68 68',
-      '--border-color-test': '68 68 68',
-      '--ring-color-test': '68 68 68',
+      '--colors-red': getValueColorMixed('#f00'),
+      '--colors-hot': getValueColorMixed('hotpink'),
+      '--colors-primary': getValueColorMixed('#444'),
+      '--background-color-test': getValueColorMixed('#444'),
+      '--text-color-test': getValueColorMixed('#444'),
+      '--border-color-test': getValueColorMixed('#444'),
+      '--ring-color-test': getValueColorMixed('#444'),
       '--font-size-base': '16px',
       '--border-radius': '5px',
       '--font-family-foo': 'a, b, "C 4"',
@@ -107,7 +108,7 @@ describe('getThemeAsCustomProps', () => {
   })
 
   describe('resolveThemeConfig', () => {
-    test('should recusivly set', () => {
+    test('should recursively set', () => {
       const result = resolveThemeConfig({
         colors: {
           red: '#f00',
@@ -123,39 +124,23 @@ describe('getThemeAsCustomProps', () => {
 
       expect(result).toEqual({
         colors: {
-          red: expect.any(Function),
+          red: "var(--colors-red)",
           primary: {
-            default: expect.any(Function),
-            darker: expect.any(Function),
+            default: "var(--colors-primary)",
+            darker: "var(--colors-primary-darker)",
           },
         },
         fontSize: {
-          base: 'var(--font-size-base, 1rem)',
+          base: 'var(--font-size-base)',
         },
       })
     })
   })
 
-  describe('toRgba', () => {
-    test('should return an array of rgba', () => {
-      expect(toRgba('#fff')).toEqual([255, 255, 255])
-      expect(toRgba('#ffff')).toEqual([255, 255, 255])
-      expect(toRgba('#fff0')).toEqual([255, 255, 255])
-      expect(toRgba('hotpink')).toEqual([255, 105, 180])
-      expect(toRgba('rgb(255, 0, 0)')).toEqual([255, 0, 0])
-      expect(toRgba('rgba(255, 0, 0, 0.5)')).toEqual([255, 0, 0])
-      expect(toRgba('hsl(0, 100%, 50%)')).toEqual([255, 0, 0])
-      expect(toRgba('hsl(0, 100%, 50%, 0.5)')).toEqual([255, 0, 0])
-      expect(toRgba('__DEFINITELY_NOT_A_COLOR_NO_WAY_NO_HOW__')).toEqual(null)
-    })
-  })
-
   describe('defaultCustomVarTransformer', () => {
-    test('should return a string in rgb for colors', () => {
-      expect(defaultCustomPropValueTransformer(['colors'], 'rgb(255, 0, 0)')).toEqual('255 0 0')
-      expect(defaultCustomPropValueTransformer(['backgroundColor'], 'rgb(255, 0, 0)')).toEqual('255 0 0')
-      expect(defaultCustomPropValueTransformer(['borderColor'], 'rgb(255, 0, 0)')).toEqual('255 0 0')
-      expect(defaultCustomPropValueTransformer(['textColor'], 'rgb(255, 0, 0)')).toEqual('255 0 0')
+    test.each(colorConfigKeys)('defaultCustomPropValue handles property %s properly', property => {
+      expect(defaultCustomPropValueTransformer([property], 'cornflowerblue'))
+        .toEqual(getValueColorMixed('cornflowerblue'))
     })
 
     test('should just return the value when it is not a color', () => {
@@ -164,24 +149,10 @@ describe('getThemeAsCustomProps', () => {
   })
 
   describe('defaultConfigValueTransformer', () => {
-    test('should return a string in rgb for color type configs', () => {
-      expect(defaultConfigValueTransformer(['colors', 'primary'], 'rgb(255, 0, 0)')({ opacityVariable: '--bg-opacity' })).toEqual('rgb(var(--colors-primary) / var(--bg-opacity, 1))')
-      expect(defaultConfigValueTransformer(['colors', 'primary'], 'rgb(255, 0, 0)')({ opacityValue: '0.2' })).toEqual('rgb(var(--colors-primary) / 0.2)')
-      expect(defaultConfigValueTransformer(['colors', 'primary'], 'rgb(255, 0, 0)')()).toEqual('rgb(var(--colors-primary))')
-    })
 
     test('should just return the value when it is not a color', () => {
-      expect(defaultConfigValueTransformer(['fontSize'], '16px')).toEqual('var(--font-size, 16px)')
-    })
-  })
-
-  describe('tailwindVariableHelper', () => {
-    test('should return', () => {
-      const result = tailwindVariableHelper('foo')
-
-      expect(result({ opacityValue: '0.3' })).toEqual(`rgb(var(--foo) / 0.3)`)
-      expect(result({ opacityVariable: '--tw-foo-bar' })).toEqual(`rgb(var(--foo) / var(--tw-foo-bar, 1))`)
-      expect(result()).toEqual(`rgb(var(--foo))`)
+      expect(defaultConfigValueTransformer(['colors', 'primary'], 'rgb(255, 0, 0)')).toEqual('var(--colors-primary)')
+      expect(defaultConfigValueTransformer(['fontSize'], '16px')).toEqual('var(--font-size)')
     })
   })
 })
