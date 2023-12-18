@@ -8,8 +8,6 @@ const {
   colorConfigKeys
 } = require('../src/utils')
 
-const getValueColorMixed = color => `color-mix(in srgb, ${color}, transparent calc(100% - 100% * <alpha-value>))`
-
 describe('getTailwindKeyName', () => {
   test('should return array joined', () => {
     expect(getTailwindKeyName(['foo', 'bar'])).toBe('foo-bar')
@@ -94,13 +92,13 @@ describe('getThemeAsCustomProps', () => {
     })
 
     expect(result).toEqual({
-      '--colors-red': getValueColorMixed('#f00'),
-      '--colors-hot': getValueColorMixed('hotpink'),
-      '--colors-primary': getValueColorMixed('#444'),
-      '--background-color-test': getValueColorMixed('#444'),
-      '--text-color-test': getValueColorMixed('#444'),
-      '--border-color-test': getValueColorMixed('#444'),
-      '--ring-color-test': getValueColorMixed('#444'),
+      '--colors-red': '#f00',
+      '--colors-hot': 'hotpink',
+      '--colors-primary': '#444',
+      '--background-color-test': '#444',
+      '--text-color-test': '#444',
+      '--border-color-test': '#444',
+      '--ring-color-test': '#444',
       '--font-size-base': '16px',
       '--border-radius': '5px',
       '--font-family-foo': 'a, b, "C 4"',
@@ -124,10 +122,10 @@ describe('getThemeAsCustomProps', () => {
 
       expect(result).toEqual({
         colors: {
-          red: "var(--colors-red)",
+          red: "color-mix(in srgb, var(--colors-red), transparent calc(100% - 100% * <alpha-value>))",
           primary: {
-            default: "var(--colors-primary)",
-            darker: "var(--colors-primary-darker)",
+            default: "color-mix(in srgb, var(--colors-primary), transparent calc(100% - 100% * <alpha-value>))",
+            darker: "color-mix(in srgb, var(--colors-primary-darker), transparent calc(100% - 100% * <alpha-value>))",
           },
         },
         fontSize: {
@@ -138,11 +136,6 @@ describe('getThemeAsCustomProps', () => {
   })
 
   describe('defaultCustomVarTransformer', () => {
-    test.each(colorConfigKeys)('defaultCustomPropValue handles property %s properly', property => {
-      expect(defaultCustomPropValueTransformer([property], 'cornflowerblue'))
-        .toEqual(getValueColorMixed('cornflowerblue'))
-    })
-
     test('should return a joined string when array', () => {
       expect(defaultCustomPropValueTransformer(['fontFamily'], [1, 2, 3])).toEqual('1, 2, 3')
     })
@@ -154,7 +147,6 @@ describe('getThemeAsCustomProps', () => {
   })
 
   describe('defaultConfigValueTransformer', () => {
-
     test('should return a joined string when an array', () => {
       expect(defaultConfigValueTransformer(['fontFamily', 'sans'], ['font a', 'font b'])).toEqual('var(--font-family-sans)')
     })
@@ -165,7 +157,7 @@ describe('getThemeAsCustomProps', () => {
     })
 
     test('should just return the value when it is not a color', () => {
-      expect(defaultConfigValueTransformer(['colors', 'primary'], 'rgb(255, 0, 0)')).toEqual('var(--colors-primary)')
+      expect(defaultConfigValueTransformer(['colors', 'primary'], 'rgb(255, 0, 0)')).toEqual('color-mix(in srgb, var(--colors-primary), transparent calc(100% - 100% * <alpha-value>))')
       expect(defaultConfigValueTransformer(['fontSize'], '16px')).toEqual('var(--font-size)')
     })
   })

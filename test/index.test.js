@@ -76,8 +76,8 @@ postcss(tailwindcss({
       expect(resolvedConfig).toMatchObject({
         "theme": {
           "colors": {
-            "with-opacity": "var(--colors-with-opacity)",
-            "hotpink": "var(--colors-hotpink)",
+            "with-opacity": "color-mix(in srgb, var(--colors-with-opacity), transparent calc(100% - 100% * <alpha-value>))",
+            "hotpink": "color-mix(in srgb, var(--colors-hotpink), transparent calc(100% - 100% * <alpha-value>))",
           },
           "spacing": {
             "fart": "var(--spacing-fart)",
@@ -92,10 +92,10 @@ postcss(tailwindcss({
       const sampleConfig = { plugins: [tokenPlugin(themeSwapperOptions)] }
       const sampleConfigOutput = `
       :root, .light {
-        --colors-hotpink: color-mix(in srgb, hotpink, transparent calc(100% - 100% * <alpha-value>));
-        --colors-with-opacity: color-mix(in srgb, rgba(255, 0, 0, 0.5), transparent calc(100% - 100% * <alpha-value>));
-        --colors-primary: color-mix(in srgb, #f00, transparent calc(100% - 100% * <alpha-value>));
-        --colors-primary-darker: color-mix(in srgb, #400, transparent calc(100% - 100% * <alpha-value>));
+        --colors-hotpink: hotpink;
+        --colors-with-opacity: rgba(255, 0, 0, 0.5);
+        --colors-primary: #f00;
+        --colors-primary-darker: #400;
         --spacing-fart: 69px;
         --border-radius: 5px;
         --font-family-sans: Font A, Font B, Font C;
@@ -105,8 +105,8 @@ postcss(tailwindcss({
 
       @media (prefers-color-scheme: dark) {
         :root {
-          --colors-primary: color-mix(in srgb, #fff, transparent calc(100% - 100% * <alpha-value>));
-          --colors-primary-darker: color-mix(in srgb, #aaa, transparent calc(100% - 100% * <alpha-value>));
+          --colors-primary: #fff;
+          --colors-primary-darker: #aaa;
         }
       }
       `

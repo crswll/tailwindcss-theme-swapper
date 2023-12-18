@@ -46,10 +46,6 @@ const getTailwindKeyName = keys =>
   keys.filter(key => key.toLowerCase() !== 'default').map(kebabCase).join('-')
 
 function defaultCustomPropValueTransformer (keys, value) {
-  if (colorConfigKeys.includes(keys[0])) {
-    return `color-mix(in srgb, ${value}, transparent calc(100% - 100% * <alpha-value>))`
-  }
-
   if (keys[0] === 'fontSize' && typeof value !== 'string') {
     return value[0]
   }
@@ -64,15 +60,18 @@ function defaultCustomPropValueTransformer (keys, value) {
 function defaultConfigValueTransformer (keys, value) {
   if (
     keys[0] === 'fontSize' &&
-    typeof value === 'object' &&
+    typeof value !== 'string' &&
     process.env.NODE_ENV !== 'test'
   ) {
     console.warn(`tailwindcss-theme-swapper: Only using the font size defined at ${keys.join('.')}. Support for this may come if enough people complain about it.`)
   }
 
+  if (colorConfigKeys.includes(keys[0])) {
+    return `color-mix(in srgb, var(--${getTailwindKeyName(keys)}), transparent calc(100% - 100% * <alpha-value>))`
+  }
+
   return `var(--${getTailwindKeyName(keys)})`
 }
-
 
 function getThemeAsCustomProps (
   tokenValues,
