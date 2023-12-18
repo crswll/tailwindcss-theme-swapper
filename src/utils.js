@@ -62,16 +62,12 @@ function defaultCustomPropValueTransformer (keys, value) {
 }
 
 function defaultConfigValueTransformer (keys, value) {
-  if (colorConfigKeys.includes(keys[0])) {
-    return `var(--${getTailwindKeyName(keys)})`
-  }
-
-  if (keys[0] === 'fontSize' && typeof value === 'object') {
-    if (process.env.NODE_ENV !== 'test') {
-      console.warn(`tailwindcss-theme-swapper: Only using the font size defined at ${keys.join('.')}. Support for this may come if enough people complain about it.`)
-    }
-
-    return `var(--${getTailwindKeyName(keys)})`
+  if (
+    keys[0] === 'fontSize' &&
+    typeof value === 'object' &&
+    process.env.NODE_ENV !== 'test'
+  ) {
+    console.warn(`tailwindcss-theme-swapper: Only using the font size defined at ${keys.join('.')}. Support for this may come if enough people complain about it.`)
   }
 
   return `var(--${getTailwindKeyName(keys)})`
