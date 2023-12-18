@@ -78,10 +78,17 @@ postcss(tailwindcss({
           "colors": {
             "with-opacity": "color-mix(in srgb, var(--colors-with-opacity), transparent calc(100% - 100% * <alpha-value>))",
             "hotpink": "color-mix(in srgb, var(--colors-hotpink), transparent calc(100% - 100% * <alpha-value>))",
+            "primary": {
+              "default": "color-mix(in srgb, var(--colors-primary), transparent calc(100% - 100% * <alpha-value>))",
+              "darker": "color-mix(in srgb, var(--colors-primary-darker), transparent calc(100% - 100% * <alpha-value>))",
+            }
           },
           "spacing": {
             "fart": "var(--spacing-fart)",
           },
+          "fontSize": {
+            "sm": "var(--font-size-sm)",
+          }
         },
       })
     })
