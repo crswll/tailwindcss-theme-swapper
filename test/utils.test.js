@@ -150,7 +150,7 @@ describe('getThemeAsCustomProps', () => {
     })
   })
 
-  describe('defaultCustomVarTransformer', () => {
+  describe('defaultCustomPropValueTransformer', () => {
     test('should return a string in rgb for colors', () => {
       expect(defaultCustomPropValueTransformer(['colors'], 'rgb(255, 0, 0)')).toEqual('255 0 0')
       expect(defaultCustomPropValueTransformer(['backgroundColor'], 'rgb(255, 0, 0)')).toEqual('255 0 0')
@@ -158,8 +158,13 @@ describe('getThemeAsCustomProps', () => {
       expect(defaultCustomPropValueTransformer(['textColor'], 'rgb(255, 0, 0)')).toEqual('255 0 0')
     })
 
+    test('should return a joined string when array', () => {
+      expect(defaultCustomPropValueTransformer(['fontFamily'], [1, 2, 3])).toEqual('1, 2, 3')
+    })
+
     test('should just return the value when it is not a color', () => {
       expect(defaultCustomPropValueTransformer(['fontSize'], '16px')).toEqual('16px')
+      expect(defaultCustomPropValueTransformer(['fontSize'], ['16px', '1'])).toEqual('16px')
     })
   })
 
@@ -170,8 +175,17 @@ describe('getThemeAsCustomProps', () => {
       expect(defaultConfigValueTransformer(['colors', 'primary'], 'rgb(255, 0, 0)')()).toEqual('rgb(var(--colors-primary))')
     })
 
+    test('should return a joined string when an array', () => {
+      expect(defaultConfigValueTransformer(['fontFamily', 'sans'], ['font a', 'font b'])).toEqual('var(--font-family-sans, font a,font b)')
+    })
+
+    test('should just use the font-size when using a more complex value for fontSize', () => {
+      expect(defaultConfigValueTransformer(['fontSize', 'complex'], ['24px', { lineHeight: '1.2' }])).toEqual('var(--font-size-complex, 24px)')
+      expect(defaultConfigValueTransformer(['fontSize', 'complex'], ['22px', '1.2'])).toEqual('var(--font-size-complex, 22px)')
+    })
+
     test('should just return the value when it is not a color', () => {
-      expect(defaultConfigValueTransformer(['fontSize'], '16px')).toEqual('var(--font-size, 16px)')
+      expect(defaultConfigValueTransformer(['fontSize', 'base'], '16px')).toEqual('var(--font-size-base, 16px)')
     })
   })
 
