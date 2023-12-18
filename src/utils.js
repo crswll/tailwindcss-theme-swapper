@@ -57,19 +57,10 @@ function flatten (
 const getTailwindKeyName = keys =>
   keys.filter(key => key.toLowerCase() !== 'default').map(kebabCase).join('-')
 
-function hasAlpha (color) {
-  return (
-    color.startsWith('rgba(') ||
-    color.startsWith('hsla(') ||
-    (color.startsWith('#') && color.length === 9) ||
-    (color.startsWith('#') && color.length === 5)
-  )
-}
-
 function toRgba (color) {
   try {
-    const [ r, g, b, a ] = Color(color).rgb().array()
-    return [ r, g, b, a === undefined && hasAlpha(color) ? 1 : a ]
+    const [ r, g, b ] = Color(color).rgb().array()
+    return [ r, g, b ]
   } catch {
     return null
   }
@@ -78,7 +69,7 @@ function toRgba (color) {
 function defaultCustomPropValueTransformer (keys, value) {
   if (colorConfigKeys.includes(keys[0])) {
     const color = toRgba(value)
-    if (!hasAlpha(value) && color) {
+    if (color) {
       const [ r, g, b ] = color
       return `${r} ${g} ${b}`
     }
@@ -89,7 +80,7 @@ function defaultCustomPropValueTransformer (keys, value) {
   }
 
   if (Array.isArray(value)) {
-    return value.join(',')
+    return value.join(', ')
   }
 
   return value
@@ -97,7 +88,7 @@ function defaultCustomPropValueTransformer (keys, value) {
 
 function defaultConfigValueTransformer (keys, value) {
   if (colorConfigKeys.includes(keys[0])) {
-    if (!hasAlpha(value) && toRgba(value)) {
+    if (toRgba(value)) {
       return tailwindVariableHelper(getTailwindKeyName(keys))
     }
   }

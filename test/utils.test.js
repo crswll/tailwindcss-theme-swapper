@@ -35,12 +35,14 @@ describe('flatten', () => {
         deep: true,
       },
       shallow: 2,
+      list: [1, 2],
     })
 
     expect(result).toEqual({
       'foo.bar.baz': 'whoa',
       'not.deep': true,
       'shallow': 2,
+      'list': [1, 2],
     })
   })
 
@@ -87,6 +89,7 @@ describe('getThemeAsCustomProps', () => {
       ringColor: { test: '#444' },
       fontSize: { base: '16px' },
       borderRadius: { default: '5px' },
+      fontFamily: { foo: ['a', 'b', '"C 4"'] },
     })
 
     expect(result).toEqual({
@@ -99,6 +102,7 @@ describe('getThemeAsCustomProps', () => {
       '--ring-color-test': '68 68 68',
       '--font-size-base': '16px',
       '--border-radius': '5px',
+      '--font-family-foo': 'a, b, "C 4"',
     })
   })
 
@@ -134,14 +138,14 @@ describe('getThemeAsCustomProps', () => {
 
   describe('toRgba', () => {
     test('should return an array of rgba', () => {
-      expect(toRgba('#fff')).toEqual([255, 255, 255, undefined])
-      expect(toRgba('#ffff')).toEqual([255, 255, 255, 1])
-      expect(toRgba('#fff0')).toEqual([255, 255, 255, 0])
-      expect(toRgba('hotpink')).toEqual([255, 105, 180, undefined])
-      expect(toRgba('rgb(255, 0, 0)')).toEqual([255, 0, 0, undefined])
-      expect(toRgba('rgba(255, 0, 0, 0.5)')).toEqual([255, 0, 0, 0.5])
-      expect(toRgba('hsl(0, 100%, 50%)')).toEqual([255, 0, 0, undefined])
-      expect(toRgba('hsl(0, 100%, 50%, 0.5)')).toEqual([255, 0, 0, 0.5])
+      expect(toRgba('#fff')).toEqual([255, 255, 255])
+      expect(toRgba('#ffff')).toEqual([255, 255, 255])
+      expect(toRgba('#fff0')).toEqual([255, 255, 255])
+      expect(toRgba('hotpink')).toEqual([255, 105, 180])
+      expect(toRgba('rgb(255, 0, 0)')).toEqual([255, 0, 0])
+      expect(toRgba('rgba(255, 0, 0, 0.5)')).toEqual([255, 0, 0])
+      expect(toRgba('hsl(0, 100%, 50%)')).toEqual([255, 0, 0])
+      expect(toRgba('hsl(0, 100%, 50%, 0.5)')).toEqual([255, 0, 0])
       expect(toRgba('__DEFINITELY_NOT_A_COLOR_NO_WAY_NO_HOW__')).toEqual(null)
     })
   })
@@ -155,7 +159,7 @@ describe('getThemeAsCustomProps', () => {
     })
 
     test('should return a joined string when array', () => {
-      expect(defaultCustomPropValueTransformer(['fontFamily'], [1, 2, 3])).toEqual('1,2,3')
+      expect(defaultCustomPropValueTransformer(['fontFamily'], [1, 2, 3])).toEqual('1, 2, 3')
     })
 
     test('should just return the value when it is not a color', () => {
