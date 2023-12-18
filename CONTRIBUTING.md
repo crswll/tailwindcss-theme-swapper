@@ -1,4 +1,4 @@
-# tailwindcss-tokens
+# tailwindcss-theme-swapper
 
 ## Test `npm run test`
 This runs the **tests** once.

@@ -5,8 +5,7 @@ const {
   getTailwindKeyName,
   getThemeAsCustomProps,
   resolveThemeConfig,
-  tailwindVariableHelper,
-  toRgba,
+  colorConfigKeys
 } = require('../src/utils')
 
 describe('getTailwindKeyName', () => {
@@ -93,13 +92,13 @@ describe('getThemeAsCustomProps', () => {
     })
 
     expect(result).toEqual({
-      '--colors-red': '255 0 0',
-      '--colors-hot': '255 105 180',
-      '--colors-primary': '68 68 68',
-      '--background-color-test': '68 68 68',
-      '--text-color-test': '68 68 68',
-      '--border-color-test': '68 68 68',
-      '--ring-color-test': '68 68 68',
+      '--colors-red': '#f00',
+      '--colors-hot': 'hotpink',
+      '--colors-primary': '#444',
+      '--background-color-test': '#444',
+      '--text-color-test': '#444',
+      '--border-color-test': '#444',
+      '--ring-color-test': '#444',
       '--font-size-base': '16px',
       '--border-radius': '5px',
       '--font-family-foo': 'a, b, "C 4"',
@@ -107,7 +106,7 @@ describe('getThemeAsCustomProps', () => {
   })
 
   describe('resolveThemeConfig', () => {
-    test('should recusivly set', () => {
+    test('should recursively set', () => {
       const result = resolveThemeConfig({
         colors: {
           red: '#f00',
@@ -123,41 +122,20 @@ describe('getThemeAsCustomProps', () => {
 
       expect(result).toEqual({
         colors: {
-          red: expect.any(Function),
+          red: "color-mix(in srgb, var(--colors-red), transparent calc(100% - 100% * <alpha-value>))",
           primary: {
-            default: expect.any(Function),
-            darker: expect.any(Function),
+            default: "color-mix(in srgb, var(--colors-primary), transparent calc(100% - 100% * <alpha-value>))",
+            darker: "color-mix(in srgb, var(--colors-primary-darker), transparent calc(100% - 100% * <alpha-value>))",
           },
         },
         fontSize: {
-          base: 'var(--font-size-base, 1rem)',
+          base: 'var(--font-size-base)',
         },
       })
     })
   })
 
-  describe('toRgba', () => {
-    test('should return an array of rgba', () => {
-      expect(toRgba('#fff')).toEqual([255, 255, 255])
-      expect(toRgba('#ffff')).toEqual([255, 255, 255])
-      expect(toRgba('#fff0')).toEqual([255, 255, 255])
-      expect(toRgba('hotpink')).toEqual([255, 105, 180])
-      expect(toRgba('rgb(255, 0, 0)')).toEqual([255, 0, 0])
-      expect(toRgba('rgba(255, 0, 0, 0.5)')).toEqual([255, 0, 0])
-      expect(toRgba('hsl(0, 100%, 50%)')).toEqual([255, 0, 0])
-      expect(toRgba('hsl(0, 100%, 50%, 0.5)')).toEqual([255, 0, 0])
-      expect(toRgba('__DEFINITELY_NOT_A_COLOR_NO_WAY_NO_HOW__')).toEqual(null)
-    })
-  })
-
-  describe('defaultCustomPropValueTransformer', () => {
-    test('should return a string in rgb for colors', () => {
-      expect(defaultCustomPropValueTransformer(['colors'], 'rgb(255, 0, 0)')).toEqual('255 0 0')
-      expect(defaultCustomPropValueTransformer(['backgroundColor'], 'rgb(255, 0, 0)')).toEqual('255 0 0')
-      expect(defaultCustomPropValueTransformer(['borderColor'], 'rgb(255, 0, 0)')).toEqual('255 0 0')
-      expect(defaultCustomPropValueTransformer(['textColor'], 'rgb(255, 0, 0)')).toEqual('255 0 0')
-    })
-
+  describe('defaultCustomVarTransformer', () => {
     test('should return a joined string when array', () => {
       expect(defaultCustomPropValueTransformer(['fontFamily'], [1, 2, 3])).toEqual('1, 2, 3')
     })
@@ -169,33 +147,18 @@ describe('getThemeAsCustomProps', () => {
   })
 
   describe('defaultConfigValueTransformer', () => {
-    test('should return a string in rgb for color type configs', () => {
-      expect(defaultConfigValueTransformer(['colors', 'primary'], 'rgb(255, 0, 0)')({ opacityVariable: '--bg-opacity' })).toEqual('rgb(var(--colors-primary) / var(--bg-opacity, 1))')
-      expect(defaultConfigValueTransformer(['colors', 'primary'], 'rgb(255, 0, 0)')({ opacityValue: '0.2' })).toEqual('rgb(var(--colors-primary) / 0.2)')
-      expect(defaultConfigValueTransformer(['colors', 'primary'], 'rgb(255, 0, 0)')()).toEqual('rgb(var(--colors-primary))')
-    })
-
     test('should return a joined string when an array', () => {
-      expect(defaultConfigValueTransformer(['fontFamily', 'sans'], ['font a', 'font b'])).toEqual('var(--font-family-sans, font a,font b)')
+      expect(defaultConfigValueTransformer(['fontFamily', 'sans'], ['font a', 'font b'])).toEqual('var(--font-family-sans)')
     })
 
     test('should just use the font-size when using a more complex value for fontSize', () => {
-      expect(defaultConfigValueTransformer(['fontSize', 'complex'], ['24px', { lineHeight: '1.2' }])).toEqual('var(--font-size-complex, 24px)')
-      expect(defaultConfigValueTransformer(['fontSize', 'complex'], ['22px', '1.2'])).toEqual('var(--font-size-complex, 22px)')
+      expect(defaultConfigValueTransformer(['fontSize', 'complex'], ['24px', { lineHeight: '1.2' }])).toEqual('var(--font-size-complex)')
+      expect(defaultConfigValueTransformer(['fontSize', 'complex'], ['22px', '1.2'])).toEqual('var(--font-size-complex)')
     })
 
     test('should just return the value when it is not a color', () => {
-      expect(defaultConfigValueTransformer(['fontSize', 'base'], '16px')).toEqual('var(--font-size-base, 16px)')
-    })
-  })
-
-  describe('tailwindVariableHelper', () => {
-    test('should return', () => {
-      const result = tailwindVariableHelper('foo')
-
-      expect(result({ opacityValue: '0.3' })).toEqual(`rgb(var(--foo) / 0.3)`)
-      expect(result({ opacityVariable: '--tw-foo-bar' })).toEqual(`rgb(var(--foo) / var(--tw-foo-bar, 1))`)
-      expect(result()).toEqual(`rgb(var(--foo))`)
+      expect(defaultConfigValueTransformer(['colors', 'primary'], 'rgb(255, 0, 0)')).toEqual('color-mix(in srgb, var(--colors-primary), transparent calc(100% - 100% * <alpha-value>))')
+      expect(defaultConfigValueTransformer(['fontSize'], '16px')).toEqual('var(--font-size)')
     })
   })
 })

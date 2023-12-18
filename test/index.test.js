@@ -11,7 +11,7 @@ expect.extend({
 const defaultTheme = {
   colors: {
     hotpink: 'hotpink',
-    'with-opacity-ignored': 'rgba(255, 0, 0, 0.5)',
+    'with-opacity': 'rgba(255, 0, 0, 0.5)',
     primary: {
       default: '#f00',
       darker: '#400',
@@ -76,12 +76,19 @@ postcss(tailwindcss({
       expect(resolvedConfig).toMatchObject({
         "theme": {
           "colors": {
-            "with-opacity-ignored": expect.any(Function),
-            "hotpink": expect.any(Function),
+            "with-opacity": "color-mix(in srgb, var(--colors-with-opacity), transparent calc(100% - 100% * <alpha-value>))",
+            "hotpink": "color-mix(in srgb, var(--colors-hotpink), transparent calc(100% - 100% * <alpha-value>))",
+            "primary": {
+              "default": "color-mix(in srgb, var(--colors-primary), transparent calc(100% - 100% * <alpha-value>))",
+              "darker": "color-mix(in srgb, var(--colors-primary-darker), transparent calc(100% - 100% * <alpha-value>))",
+            }
           },
           "spacing": {
-            "fart": "var(--spacing-fart, 69px)",
+            "fart": "var(--spacing-fart)",
           },
+          "fontSize": {
+            "sm": "var(--font-size-sm)",
+          }
         },
       })
     })
@@ -92,10 +99,10 @@ postcss(tailwindcss({
       const sampleConfig = { plugins: [tokenPlugin(themeSwapperOptions)] }
       const sampleConfigOutput = `
       :root, .light {
-        --colors-hotpink: 255 105 180;
-        --colors-with-opacity-ignored: 255 0 0;
-        --colors-primary: 255 0 0;
-        --colors-primary-darker: 68 0 0;
+        --colors-hotpink: hotpink;
+        --colors-with-opacity: rgba(255, 0, 0, 0.5);
+        --colors-primary: #f00;
+        --colors-primary-darker: #400;
         --spacing-fart: 69px;
         --border-radius: 5px;
         --font-family-sans: Font A, Font B, Font C;
@@ -105,8 +112,8 @@ postcss(tailwindcss({
 
       @media (prefers-color-scheme: dark) {
         :root {
-          --colors-primary: 255 255 255;
-          --colors-primary-darker: 170 170 170
+          --colors-primary: #fff;
+          --colors-primary-darker: #aaa;
         }
       }
       `
