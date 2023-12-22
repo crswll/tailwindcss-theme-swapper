@@ -114,7 +114,10 @@ const themes = [
     selectors: [':root'],
     theme: {
       colors: {
-        primary: '#222',
+        primary: 'hsl(0 100% 50%)',
+      },
+      spacing: {
+        sm: '3px',
       },
     },
   },
@@ -128,16 +131,15 @@ const themes = [
     mediaQuery: '@media (prefers-color-scheme: dark)',
     theme: {
       colors: {
-        primary: '#ddd',
+        primary: 'darkslateblue',
       },
     },
   },
   {
-    name: 'high-contrast',
-    mediaQuery: '@media (prefers-contrast: high)',
+    selectors: ['.lime']
     theme: {
       colors: {
-        primary: '#ddd',
+        primary: '#0f0',
       },
     },
   },
@@ -148,39 +150,37 @@ const themes = [
 
 ```css
 :root {
-  --colors-primary: 34 34 34
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --colors-primary: 221 221 221
-  }
+  --colors-primary: hsl(0 100% 50%);
+  --spacing-sm: 3px
 }
 
 .dark, [dark], [data-theme="dark"] {
-  --colors-primary: 221 221 221
+  --colors-primary: darkslateblue
 }
 
-@media (prefers-contrast: high) {
-  :root {
-    --colors-primary: 255 255 255
+@media (prefers-color-scheme: dark) {
+  :root{
+    --colors-primary: darkslateblue
   }
+}
+
+.lime {
+  --colors-primary: #0f0
 }
 
 /* ... */
 
-.text-primary {
-  --tw-text-opacity: 1;
-  color: rgb(var(--colors-primary) / var(--tw-text-opacity));
-}
-
 .bg-primary {
   --tw-bg-opacity: 1;
-  background-color: rgb(var(--colors-primary) / var(--tw-bg-opacity));
+  background-color: color-mix(in srgb, var(--colors-primary), transparent calc(100% - 100% * var(--tw-bg-opacity)))
 }
 
-.border-primary {
-  --tw-border-opacity: 1;
-  border-color: rgb(var(--colors-primary) / var(--tw-border-opacity));
+.text-primary {
+  --tw-text-opacity: 1;
+  background-color: color-mix(in srgb, var(--colors-primary), transparent calc(100% - 100% * var(--tw-text-opacity)))
+}
+
+.p-sm {
+  padding: var(--spacing-sm)
 }
 ```
