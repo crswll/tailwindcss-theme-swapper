@@ -1,11 +1,10 @@
 const {
-  defaultConfigValueTransformer,
-  defaultCustomPropValueTransformer,
+  tailwindConfigValueTransformer,
+  toCustomPropertyValue,
   flatten,
   getTailwindKeyName,
   getThemeAsCustomProps,
   resolveThemeConfig,
-  colorConfigKeys
 } = require('../src/utils')
 
 describe('getTailwindKeyName', () => {
@@ -137,28 +136,28 @@ describe('getThemeAsCustomProps', () => {
 
   describe('defaultCustomVarTransformer', () => {
     test('should return a joined string when array', () => {
-      expect(defaultCustomPropValueTransformer(['fontFamily'], [1, 2, 3])).toEqual('1, 2, 3')
+      expect(toCustomPropertyValue(['fontFamily'], [1, 2, 3])).toEqual('1, 2, 3')
     })
 
     test('should just return the value when it is not a color', () => {
-      expect(defaultCustomPropValueTransformer(['fontSize'], '16px')).toEqual('16px')
-      expect(defaultCustomPropValueTransformer(['fontSize'], ['16px', '1'])).toEqual('16px')
+      expect(toCustomPropertyValue(['fontSize'], '16px')).toEqual('16px')
+      expect(toCustomPropertyValue(['fontSize'], ['16px', '1'])).toEqual('16px')
     })
   })
 
-  describe('defaultConfigValueTransformer', () => {
+  describe('tailwindConfigValueTransformer', () => {
     test('should return a joined string when an array', () => {
-      expect(defaultConfigValueTransformer(['fontFamily', 'sans'], ['font a', 'font b'])).toEqual('var(--font-family-sans)')
+      expect(tailwindConfigValueTransformer(['fontFamily', 'sans'], ['font a', 'font b'])).toEqual('var(--font-family-sans)')
     })
 
     test('should just use the font-size when using a more complex value for fontSize', () => {
-      expect(defaultConfigValueTransformer(['fontSize', 'complex'], ['24px', { lineHeight: '1.2' }])).toEqual('var(--font-size-complex)')
-      expect(defaultConfigValueTransformer(['fontSize', 'complex'], ['22px', '1.2'])).toEqual('var(--font-size-complex)')
+      expect(tailwindConfigValueTransformer(['fontSize', 'complex'], ['24px', { lineHeight: '1.2' }])).toEqual('var(--font-size-complex)')
+      expect(tailwindConfigValueTransformer(['fontSize', 'complex'], ['22px', '1.2'])).toEqual('var(--font-size-complex)')
     })
 
     test('should just return the value when it is not a color', () => {
-      expect(defaultConfigValueTransformer(['colors', 'primary'], 'rgb(255, 0, 0)')).toEqual('color-mix(in srgb, var(--colors-primary), transparent calc(100% - 100% * <alpha-value>))')
-      expect(defaultConfigValueTransformer(['fontSize'], '16px')).toEqual('var(--font-size)')
+      expect(tailwindConfigValueTransformer(['colors', 'primary'], 'rgb(255, 0, 0)')).toEqual('color-mix(in srgb, var(--colors-primary), transparent calc(100% - 100% * <alpha-value>))')
+      expect(tailwindConfigValueTransformer(['fontSize'], '16px')).toEqual('var(--font-size)')
     })
   })
 })
