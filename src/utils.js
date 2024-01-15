@@ -16,36 +16,39 @@ const colorConfigKeys = [
 
 function kebabCase (string) {
   return string
-  .replace(/([a-z])([A-Z])/g, '$1-$2')
-  .replace(/\s+/g, '-')
-  .toLowerCase()
+    .replace(/([a-z])([A-Z])/g, '$1-$2')
+    .replace(/\s+/g, '-')
+    .toLowerCase()
 }
 
 function flatten (
-  obj,
-  transformKeyCallback = key => key.join('.'),
-  transformValueCallback = (keys, value) => value,
-  previousKeys = [],
-  flattened = {}
+  someObject,
+  transformKey = (keys, value) => keys.join('.'),
+  transformValue = (keys, value) => value,
 ) {
-  return Object
-    .entries(obj)
-    .reduce((acc, [key, value]) => {
-      const keyPath = [...previousKeys, key]
+  const result = {}
 
+  function flat (object, parentKeys) {
+    for (const [key, value] of Object.entries(object)) {
+      const keyPath = [...parentKeys, key]
       if (typeof value === 'object' && !Array.isArray(value)) {
-        flatten(value, transformKeyCallback, transformValueCallback, keyPath, acc)
+        flat(value, keyPath)
       } else {
-        flattened[transformKeyCallback(keyPath)] = transformValueCallback(keyPath, value)
+        result[transformKey(keyPath)] = transformValue(keyPath, value)
       }
-      return acc
-    }, flattened)
+    }
+  }
+
+  flat(someObject, [])
+
+  return result
 }
 
-const getTailwindKeyName = keys =>
-  keys.filter(key => key.toLowerCase() !== 'default').map(kebabCase).join('-')
+function getTailwindKeyName (keys) {
+  return keys.filter(key => key.toLowerCase() !== 'default').map(kebabCase).join('-')
+}
 
-function defaultCustomPropValueTransformer (keys, value) {
+function toCustomPropertyValue (keys, value) {
   if (keys[0] === 'fontSize' && typeof value !== 'string') {
     return value[0]
   }
@@ -57,7 +60,7 @@ function defaultCustomPropValueTransformer (keys, value) {
   return value
 }
 
-function defaultConfigValueTransformer (keys, value) {
+function toConfigValue (keys, value) {
   if (
     keys[0] === 'fontSize' &&
     typeof value !== 'string' &&
@@ -73,40 +76,37 @@ function defaultConfigValueTransformer (keys, value) {
   return `var(--${getTailwindKeyName(keys)})`
 }
 
-function getThemeAsCustomProps (
-  tokenValues,
-  transformer = defaultCustomPropValueTransformer
-) {
+function getThemeAsCustomProps (themeConfig) {
   return flatten(
-    tokenValues,
+    themeConfig,
     keys => `--${getTailwindKeyName(keys)}`,
-    transformer
+    toCustomPropertyValue
   )
 }
 
 
-function resolveThemeConfig (
-  tokenValue,
-  previousKeys = [],
-  valueTransformer = defaultConfigValueTransformer
+function resolveTailwindThemeConfig (
+  themeConfig,
+  previousKeys = []
 ) {
-  return Object
-    .entries(tokenValue)
-    .reduce((acc, [key, value]) => {
-      const keyPath = [ ...previousKeys, key ]
-      return {
-        ...acc,
-        [key]: typeof value === 'object' && !Array.isArray(value)
-          ? resolveThemeConfig(value, keyPath)
-          : valueTransformer(keyPath, value)
-      }
-    }, {})
+  const config = {}
+
+  for (const [key, value] of Object.entries(themeConfig)) {
+    const keyPath = [...previousKeys, key]
+    if (typeof value === 'object' && !Array.isArray(value)) {
+      config[key] = resolveTailwindThemeConfig(value, keyPath)
+    } else {
+      config[key] = toConfigValue(keyPath, value)
+    }
+  }
+
+  return config
 }
 
-module.exports.defaultConfigValueTransformer = defaultConfigValueTransformer
-module.exports.defaultCustomPropValueTransformer = defaultCustomPropValueTransformer
+module.exports.tailwindConfigValueTransformer = toConfigValue
+module.exports.toCustomPropertyValue = toCustomPropertyValue
 module.exports.flatten = flatten
 module.exports.getTailwindKeyName = getTailwindKeyName
 module.exports.getThemeAsCustomProps = getThemeAsCustomProps
-module.exports.resolveThemeConfig = resolveThemeConfig
+module.exports.resolveThemeConfig = resolveTailwindThemeConfig
 module.exports.colorConfigKeys = colorConfigKeys
