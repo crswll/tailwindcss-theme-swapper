@@ -70,7 +70,7 @@ function toConfigValue (keys, value) {
   }
 
   if (colorConfigKeys.includes(keys[0])) {
-    return `color-mix(in srgb, var(--${getTailwindKeyName(keys)}), transparent calc(100% - 100% * <alpha-value>))`
+    return `color-mix(in srgb, var(--${getTailwindKeyName(keys)}) calc(100% * <alpha-value>), transparent)`
   }
 
   return `var(--${getTailwindKeyName(keys)})`

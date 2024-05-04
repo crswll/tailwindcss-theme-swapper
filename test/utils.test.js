@@ -121,10 +121,10 @@ describe('getThemeAsCustomProps', () => {
 
       expect(result).toEqual({
         colors: {
-          red: "color-mix(in srgb, var(--colors-red), transparent calc(100% - 100% * <alpha-value>))",
+          red: "color-mix(in srgb, var(--colors-red) calc(100% * <alpha-value>), transparent)",
           primary: {
-            default: "color-mix(in srgb, var(--colors-primary), transparent calc(100% - 100% * <alpha-value>))",
-            darker: "color-mix(in srgb, var(--colors-primary-darker), transparent calc(100% - 100% * <alpha-value>))",
+            default: "color-mix(in srgb, var(--colors-primary) calc(100% * <alpha-value>), transparent)",
+            darker: "color-mix(in srgb, var(--colors-primary-darker) calc(100% * <alpha-value>), transparent)",
           },
         },
         fontSize: {
@@ -156,7 +156,7 @@ describe('getThemeAsCustomProps', () => {
     })
 
     test('should just return the value when it is not a color', () => {
-      expect(tailwindConfigValueTransformer(['colors', 'primary'], 'rgb(255, 0, 0)')).toEqual('color-mix(in srgb, var(--colors-primary), transparent calc(100% - 100% * <alpha-value>))')
+      expect(tailwindConfigValueTransformer(['colors', 'primary'], 'rgb(255, 0, 0)')).toEqual('color-mix(in srgb, var(--colors-primary) calc(100% * <alpha-value>), transparent)')
       expect(tailwindConfigValueTransformer(['fontSize'], '16px')).toEqual('var(--font-size)')
     })
   })

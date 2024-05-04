@@ -76,11 +76,11 @@ postcss(tailwindcss({
       expect(resolvedConfig).toMatchObject({
         "theme": {
           "colors": {
-            "with-opacity": "color-mix(in srgb, var(--colors-with-opacity), transparent calc(100% - 100% * <alpha-value>))",
-            "hotpink": "color-mix(in srgb, var(--colors-hotpink), transparent calc(100% - 100% * <alpha-value>))",
+            "with-opacity": "color-mix(in srgb, var(--colors-with-opacity) calc(100% * <alpha-value>), transparent)",
+            "hotpink": "color-mix(in srgb, var(--colors-hotpink) calc(100% * <alpha-value>), transparent)",
             "primary": {
-              "default": "color-mix(in srgb, var(--colors-primary), transparent calc(100% - 100% * <alpha-value>))",
-              "darker": "color-mix(in srgb, var(--colors-primary-darker), transparent calc(100% - 100% * <alpha-value>))",
+              "default": "color-mix(in srgb, var(--colors-primary) calc(100% * <alpha-value>), transparent)",
+              "darker": "color-mix(in srgb, var(--colors-primary-darker) calc(100% * <alpha-value>), transparent)",
             }
           },
           "spacing": {
