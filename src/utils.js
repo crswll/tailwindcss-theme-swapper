@@ -45,7 +45,11 @@ function flatten (
 }
 
 function getTailwindKeyName (keys) {
-  return keys.filter(key => key.toLowerCase() !== 'default').map(kebabCase).join('-')
+  return keys
+    .filter(key => key.toLowerCase() !== 'default')
+    .map(kebabCase)
+    .map(key => key.replace(/[^a-z0-9\-]/gi, '_'))
+    .join('-')
 }
 
 function toCustomPropertyValue (keys, value) {

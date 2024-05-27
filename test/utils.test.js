@@ -87,7 +87,13 @@ describe('getThemeAsCustomProps', () => {
       ringColor: { test: '#444' },
       fontSize: { base: '16px' },
       borderRadius: { default: '5px' },
-      fontFamily: { foo: ['a', 'b', '"C 4"'] },
+      spacing: {
+        5: '500px',
+        5.5: '550px',
+      },
+      fontFamily: {
+        foo: ['a', 'b', '"C 4"'],
+      },
     })
 
     expect(result).toEqual({
@@ -100,6 +106,8 @@ describe('getThemeAsCustomProps', () => {
       '--ring-color-test': '#444',
       '--font-size-base': '16px',
       '--border-radius': '5px',
+      '--spacing-5': '500px',
+      '--spacing-5_5': '550px',
       '--font-family-foo': 'a, b, "C 4"',
     })
   })
@@ -117,6 +125,10 @@ describe('getThemeAsCustomProps', () => {
         fontSize: {
           base: '1rem',
         },
+        spacing: {
+          5: '500px',
+          5.5: '550px',
+        },
       })
 
       expect(result).toEqual({
@@ -130,6 +142,10 @@ describe('getThemeAsCustomProps', () => {
         fontSize: {
           base: 'var(--font-size-base)',
         },
+        spacing: {
+          5: 'var(--spacing-5)',
+          5.5: 'var(--spacing-5_5)',
+        }
       })
     })
   })
