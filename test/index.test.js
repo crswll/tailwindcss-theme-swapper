@@ -19,6 +19,7 @@ const defaultTheme = {
   },
   spacing: {
     'fart': '69px',
+    '5.5': '550px',
   },
   borderRadius: {
     default: '5px',
@@ -104,6 +105,7 @@ postcss(tailwindcss({
         --colors-primary: #f00;
         --colors-primary-darker: #400;
         --spacing-fart: 69px;
+        --spacing-5_5: 550px;
         --border-radius: 5px;
         --font-family-sans: Font A, Font B, Font C;
         --font-size-sm: 12px;
